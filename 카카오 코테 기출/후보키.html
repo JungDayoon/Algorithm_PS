@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        var set = [];
+        let answer_set = [];
+        let answer = 0;
+
+        function hasDuplicates(array) {
+            return (new Set(array)).size !== array.length;
+        }
+
+        function isCandidate(set, relation) {
+            //console.log(answer_set);
+
+            for (let k = 0; k < answer_set.length; k++) {
+                console.log(answer_set[k]);
+                if (set.includes(answer_set[k])) {
+                    console.log("최소성 만족 x");
+
+                    return false;
+                }
+            }
+
+            let new_arr = [];
+            for (let k = 0; k < relation.length; k++) {
+                let new_string = "";
+                for (let j = 0; j < set.length; j++) {
+                    new_string += relation[k][set[j]];
+                }
+                new_arr.push(new_string);
+            }
+
+            console.log(new_arr);
+            if (!hasDuplicates(new_arr))//유일성 확보
+            {
+                return true;
+            }
+            else
+                return false;
+
+        }
+        function Combination(now_cnt, goal_cnt, prev, attribute_arr, relation) {
+            //console.log(answer_set);
+
+            if (now_cnt == goal_cnt) {
+                return;
+            }
+
+
+            for (let i = prev + 1; i < attribute_arr.length; i++) {
+                //추가
+                console.log(attribute_arr[i]);
+                set.push(attribute_arr[i]);
+
+                console.log(set);
+
+                if(isCandidate(set, relation))
+                {
+                    console.log("후보키 가능");
+                    answer_set.push(set);
+                }
+                else
+                {
+                    console.log("후보키 불가능");
+                }
+
+                Combination(now_cnt + 1, goal_cnt, i, attribute_arr, relation);
+
+                set.pop();
+            }
+        }
+        function solution(relation) {
+
+            let attribute_cnt = relation[0].length;
+            let attribute_arr = [];
+            for (let i = 0; i < attribute_cnt; i++)
+                attribute_arr[i] = i;
+
+            // console.log(attribute_arr);
+            // console.log(attribute_cnt);
+            // console.log(answer_set);
+
+            Combination(0, attribute_cnt, -1, attribute_arr, relation);
+
+            answer = answer_set.length;
+            console.log(answer);
+            return answer;
+        }
+
+        let relation = [["100", "ryan", "music", "2"], ["200", "apeach", "math", "2"], ["300", "tube", "computer", "3"], ["400", "con", "computer", "4"], ["500", "muzi", "music", "3"], ["600", "apeach", "music", "2"]];
+        solution(relation);
+
+    </script>
+</body>

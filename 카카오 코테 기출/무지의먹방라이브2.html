@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(food_times, k) {
+            var answer = 0;
+
+            let total_len = food_times.length;
+            let food = [];
+            let time_cnt = 0;
+            let zero_cnt = 0;
+
+            for(let i = 1; i<=total_len; i++)
+            {
+                let new_food = [];
+                new_food.push(food_times[i-1]);
+                new_food.push(i);
+
+                food.push(new_food);
+            }
+
+            food.sort((a, b)=>{
+                if(a[0] > b[0])
+                    return 1;
+                else if(a[0] < b[0])
+                    return -1;
+                else
+                {
+                    if(a[1]>b[1])
+                        return 1;
+                    else
+                        return -1;
+                }
+            })
+            console.log(food);
+
+            for(let i = 0; i<food_times.length; i++)
+            {
+                //한 음식을 다 먹는데 걸리는 시간
+                let len = food_times.length -i;
+                let eatingTime = (food[i][0] - (i === 0? 0: food[i-1][0]))*len;
+               
+                if(eatingTime > k)
+                {
+                    answer = food.slice(i).sort((a, b)=>(a[1]-b[1]))[k%len][1];
+                    console.log("answer");
+                    console.log(answer);
+                    return answer;
+                }
+
+                k-=eatingTime;
+            }
+            console.log("answer");
+            console.log(-1);
+            return -1;
+        }
+        solution([3, 1, 2], 5);
+        solution([3, 1, 2], 2);
+        solution([3,1,1,1,2,4,3],12);
+        solution([4, 3, 5, 6, 2], 7);
+        solution([4,1,1,5], 7);
+        solution( [1,1,1,1], 4);
+    </script>
+</body>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(dartResult) {
+            var answer = 0;
+            let score = 0;
+            let prevScore = 0;
+
+            for(let i = 0; i<dartResult.length;)
+            {
+                switch(dartResult[i])
+                {
+                    case 'S': 
+                        score = Math.pow(score, 1);
+                        i++;
+                        break;
+                    case 'D': 
+                        score =  Math.pow(score, 2);
+                        i++;
+                        break;
+                    case 'T': 
+                        score =  Math.pow(score, 3);
+                        i++;
+                        break;
+                    case '*':
+                        score *= 2;
+                        prevScore *= 2;
+                        i++;
+                        break;
+                    case '#': 
+                        score = score * -1;
+                        i++;
+                        //prevScore = 0;
+                        break;
+                    default: 
+                        let number = "";
+                        while(!isNaN(dartResult[i]))
+                        {
+                            number += dartResult[i]
+                            i++;
+                        }
+                        console.log(number)
+                        answer += prevScore;
+                        prevScore = score;
+                        score = Number(number);
+                        // console.log(answer);
+                        // console.log(prevScore);
+                        // console.log(score);
+                        break;
+                }
+            }
+
+            answer += prevScore;
+            answer += score;
+            console.log("answer");
+            console.log(answer);
+            return answer;
+        }
+
+        solution("1S2D*3T")
+        solution("1D2S#10S")
+        solution("1D2S0T")
+        solution("1S*2T*3S")
+        solution("1D#2S*3S")
+        solution("1T2D3D#")
+        solution("1D2S3T*")
+    </script>
+</body>

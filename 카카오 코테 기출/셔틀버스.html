@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function timeProcess(arr) {
+            var hour = Number(arr[0]);
+            var minute = Number(arr[1]);
+
+            var newTime = hour * 60 + minute;
+
+            return newTime;
+        }
+
+        function processAnswer(time)
+        {
+            var hour = parseInt(time/60); 
+            var minute = time%60; 
+
+            var str_hour = "00" + hour;
+            var str_minute = "00" + minute;
+
+            var str = str_hour.slice(-2) + ":" + str_minute.slice(-2);
+            console.log(str);
+
+            return str;
+        }
+        function solution(n, t, m, timetable) {
+            var answer = '';
+            let busTime = [];
+            let startTime = 9 * 60;
+            let crew_time = new Array(n);
+
+            for (let i = 0; i < crew_time.length; i++) {
+                crew_time[i] = [];
+            }
+
+            for (let i = 0; i < n; i++) {
+                busTime[startTime] = i;
+                startTime += t;
+            }
+            console.log(busTime);
+            console.log(crew_time);
+
+            let new_timetable = [];
+
+            timetable.forEach(element => {
+                console.log(element)
+                let myTime = element.split(":");
+                new_timetable.push(timeProcess(myTime));
+            });
+
+            new_timetable.sort((a, b) => a - b);
+            console.log(new_timetable);
+
+            let busTime_idx = 0;
+            let busTime_key = Object.keys(busTime);
+            let crew_idx = 0;
+
+            loop:
+            for (let i = 0; i < new_timetable.length; i++) {
+                let e = new_timetable[i];
+                if (crew_idx == m) {
+                    crew_idx = 0;
+                    busTime_idx++;
+                    if (busTime_idx == busTime_key.length)
+                        break loop;
+                }
+
+                if (e > busTime_key[busTime_idx]) {
+                    while (e > busTime_key[busTime_idx]) {
+                        crew_idx = 0;
+                        busTime_idx++;
+                        if (busTime_idx == busTime_key.length)
+                            break loop;
+                    }
+
+                }
+
+                console.log(busTime[busTime_key[busTime_idx]]);
+                crew_time[busTime[busTime_key[busTime_idx]]].push(e);
+                crew_idx++;
+            }
+
+            console.log(crew_time);
+
+            let conTime;
+
+            console.log(m);
+            console.log(busTime_key);
+
+            let flag = 0;
+            if(crew_time[crew_time.length-1].length < m)
+                conTime = busTime_key[busTime_key.length-1];
+            else
+                conTime = crew_time[crew_time.length-1][m-1] -1;
+            console.log(conTime);
+           
+            answer = processAnswer(conTime);
+            return answer;
+        }
+
+        solution(1, 1, 5, ["08:00", "08:01", "08:02", "08:03"])
+        solution(2, 10, 2, ["09:10", "09:09", "08:00"])
+        solution(2, 1, 2, ["09:00", "09:00", "09:00", "09:00"])
+        solution(1, 1, 5, ["00:01", "00:01", "00:01", "00:01", "00:01"])
+        solution(1, 1, 1, ["23:59"]);
+        solution(10, 60, 45, ["23:59","23:59", "23:59", "23:59", "23:59","23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59", "23:59"])
+        solution(2, 2, 3, ["09:00", "09:11", "02:11", "02:12", "02:13", "02:14"]);
+    </script>
+</body>

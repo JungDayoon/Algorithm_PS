@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(record) {
+            var answer = [];
+            var condition_str = [];
+            var user = [];
+
+            for (var i = 0; i < record.length; i++) {
+                var record_str = record[i].split(" ");
+                //console.log(record_str);
+
+                switch (record_str[0]) {
+                    case "Enter":
+                        user[record_str[1]] = record_str[2];
+                        var new_condition = new Object();
+                        new_condition.id = record_str[1];
+                        new_condition.condition = "들어왔습니다.";
+                        condition_str.push(new_condition);
+                        break;
+                    case "Leave":
+                        var new_condition = new Object();
+                        new_condition.id = record_str[1];
+                        new_condition.condition = "나갔습니다.";
+                        condition_str.push(new_condition);
+                        break;
+                    case "Change":
+                        user[record_str[1]] = record_str[2];
+                        break;
+                }
+            }
+            console.log(user);
+            console.log(condition_str);
+
+            for (var i = 0; i < condition_str.length; i++) {
+
+                var new_str = "";
+                new_str += user[condition_str[i]["id"]];
+                new_str += "님이 ";
+                new_str += condition_str[i]['condition'];
+
+                // console.log(condition_str[i]['condition']);
+                // console.log(new_str);
+                // answer.push(new_str);
+            }
+
+            //console.log(answer);
+            return answer;
+        }
+
+        var record = ["Enter uid1234 Muzi", "Enter uid4567 Prodo", "Leave uid1234", "Enter uid1234 Prodo", "Change uid4567 Ryan"];
+        solution(record);
+
+    </script>
+</body>

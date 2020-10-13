@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(word, pages) {
+            var answer = 0;
+            let address_obj = []
+            let basic_score = [];
+            let outer_link_score = [];
+            let link_score;
+            let matching_score = []; //matching = basic + link
+
+           
+
+            let index = 0;
+            pages.forEach(element => {
+                var sentence = element.split('\n');
+                sentence.forEach(s => {
+                    if (s.indexOf('<meta') != -1) {
+                        var address = s.split("\"");
+                        console.log(address);
+                        address.forEach(a=>{
+                            if(a.indexOf("https://") != -1)
+                            {
+                                address_obj[a] = index;
+                                index++;
+                            }
+                        })
+                    }
+                })
+            })
+
+            console.log(address_obj);
+            
+            pages.forEach(element => {
+                element = element.replace(/[`~!@#$%^&*|\\\'\";:\/?\n.,]/gi, " ");
+                element = element.replace(/[0-9]/g, " ");
+                var newWord = element.split(/\s/gi);
+                console.log(newWord);
+                var cnt = 0;
+                newWord.forEach(s => {
+                    if(s.toLowerCase() == word.toLowerCase())
+                        cnt++;
+                })
+                basic_score.push(cnt);
+            })
+
+            pages.forEach(element => {
+                var sentence = element.split('\n');
+                // basic_score.push((element.match(new RegExp(word, 'gi')) || []).length);
+                let tmp_link = [];
+                sentence.forEach(s => {
+                    if (s.indexOf('<a') != -1)//외부링크 포함
+                    {
+                        var other_address = s.split("\"");
+                        console.log(other_address);
+                        other_address.forEach(oa=>{
+                            if (oa.indexOf("https://") != -1)
+                            {
+                                tmp_link.push(oa);
+                            }
+                        })
+                    }
+                })
+                //console.log(element);
+                outer_link_score.push(tmp_link);
+            });
+
+            link_score = Array.from({length: basic_score.length}, () => 0);
+            
+
+            for(var e = 0; e<outer_link_score.length; e++)
+            {
+                var element = outer_link_score[e];
+                console.log(element);
+                for(var i = 0; i<element.length; i++)
+                {
+                    link_score[address_obj[element[i]]] += basic_score[e]/outer_link_score[e].length;
+                }
+            }
+            
+            for(var i = 0; i<basic_score.length; i++)
+            {
+                var tmp = [];
+                tmp.push(i);
+                tmp.push(basic_score[i] + link_score[i]);
+                matching_score.push(tmp);
+            }
+
+            matching_score.sort((a, b)=>{
+                if(a[1] < b[1])
+                    return 1;
+                else
+                    return -1;
+            });
+
+            console.log(matching_score);
+            console.log(outer_link_score);
+            console.log(link_score);
+            console.log(basic_score);
+
+            answer = matching_score[0][0];
+            console.log(answer);
+            return answer;
+        }
+
+        solution("blind", ["<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://a.com\"/>\n</head>  \n<body>\nBlind Lorem Blind ipsum dolor Blind test sit amet, consectetur adipiscing elit. \n<a href=\"https://b.com\"> Link to b </a>\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://b.com\"/>\n</head>  \n<body>\nSuspendisse potenti. Vivamus venenatis tellus non turpis bibendum, \n<a href=\"https://a.com\"> Link to a </a>\nblind sed congue urna varius. Suspendisse feugiat nisl ligula, quis malesuada felis hendrerit ut.\n<a href=\"https://c.com\"> Link to c </a>\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://c.com\"/>\n</head>  \n<body>\nUt condimentum urna at felis sodales rutrum. Sed dapibus cursus diam, non interdum nulla tempor nec. Phasellus rutrum enim at orci consectetu blind\n<a href=\"https://a.com\"> Link to a </a>\n</body>\n</html>"])
+        solution("Muzi", ["<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://careers.kakao.com/interview/list\"/>\n</head>  \n<body>\n<a href=\"https://programmers.co.kr/learn/courses/4673\"></a>#!MuziMuzi!)jayg07con&&\n\n</body>\n</html>", "<html lang=\"ko\" xml:lang=\"ko\" xmlns=\"http://www.w3.org/1999/xhtml\">\n<head>\n  <meta charset=\"utf-8\">\n  <meta property=\"og:url\" content=\"https://www.kakaocorp.com\"/>\n</head>  \n<body>\ncon%\tmuzI92apeach&2<a href=\"https://hashcode.co.kr/tos\"></a>\n\n\t^\n</body>\n</html>"]);
+    </script>
+</body>

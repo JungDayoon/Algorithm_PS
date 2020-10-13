@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+
+        function isCorrectCandidate(set, answer_set, relation) {
+            console.log(answer_set);
+            console.log(set);
+
+            for (let k = 0; k < answer_set.length; k++) {
+                let flag = 0;
+                console.log(answer_set[k]);
+                for (let j = 0; j < answer_set[k].length; j++) {
+                    if (set.indexOf(answer_set[k][j]) == -1) {
+                        flag = 1;
+                    }
+                }
+
+                if (flag == 0) {
+                    console.log("최소성 만족 x");
+                    return false;
+                }
+            }
+
+
+
+            let new_arr = [];
+            for (let k = 0; k < relation.length; k++) {
+                let new_string = "";
+                for (let j = 0; j < set.length; j++) {
+                    new_string += relation[k][set[j]];
+                }
+                new_arr.push(new_string);
+            }
+
+            console.log(new_arr);
+            if (!hasDuplicates(new_arr))//유일성 확보
+            {
+                return true;
+            }
+            else {
+                console.log("유일성 만족 x")
+                return false;
+            }
+
+        }
+        function hasDuplicates(array) {
+            return (new Set(array)).size !== array.length;
+        }
+
+        function Combination(now_cnt, goal_cnt, prev, attribute_arr, set, candidate) {
+            if (now_cnt == goal_cnt) {
+                //조합 완성
+                console.log(set);
+
+                candidate.push(Object.assign([], set));
+
+                return;
+            }
+
+            for (let i = prev + 1; i < attribute_arr.length; i++) {
+                set.push(attribute_arr[i]);
+                Combination(now_cnt + 1, goal_cnt, i, attribute_arr, set, candidate);
+                set.pop();
+            }
+        }
+        function solution(relation) {
+            let candidate = [];
+            let answer_arr = [];
+            let answer = 0;
+
+            let attribute_cnt = relation[0].length;
+            let attribute_arr = [];
+
+            for (let i = 0; i < attribute_cnt; i++)
+                attribute_arr[i] = i;
+
+            console.log(attribute_arr);
+
+            for (let i = 1; i <= attribute_cnt; i++)
+                Combination(0, i, -1, attribute_arr, [], candidate);
+
+            console.log(candidate);
+
+            for (let i = 0; i < candidate.length; i++) {
+                if (isCorrectCandidate(candidate[i], answer_arr, relation))
+                    answer_arr.push(candidate[i]);
+
+                console.log(answer_arr);
+            }
+
+            answer = answer_arr.length;
+            console.log(answer);
+            return answer;
+        }
+
+        let relation = [["100", "ryan", "music", "2"], ["200", "apeach", "math", "2"], ["300", "tube", "computer", "3"], ["400", "con", "computer", "4"], ["500", "muzi", "music", "3"], ["600", "apeach", "music", "2"]];
+        solution(relation);
+
+        relation = [["a", "b", "c"], ["1", "b", "c"], ["a", "b", "4"], ["a", "5", "c"]];
+
+        solution(relation);
+
+        relation = [["a", "1", "4"], ["2", "1", "5"], ["a", "2", "4"]];
+
+        solution(relation);
+
+    </script>
+</body>

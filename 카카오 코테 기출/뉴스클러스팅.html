@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(str1, str2) {
+            var answer = 0;
+            str1 = str1.toLowerCase();
+            str2 = str2.toLowerCase();
+
+            let str1_arr = [];
+            let str2_arr = [];
+            // console.log(str1);
+            // console.log(str2);
+
+            for(let i = 0; i<str1.length-1; i++)
+            {
+                let tmp = str1.slice(i, i+2);
+                if(tmp.charCodeAt(0)>=97 && tmp.charCodeAt(0)<=122)
+                {
+                    if(tmp.charCodeAt(1)>=97 && tmp.charCodeAt(1)<=122)
+                    {
+                        if(str1_arr[tmp] != null)
+                            str1_arr[tmp]++;
+                        else
+                            str1_arr[tmp] = 1;           
+                    }
+                }    
+              
+            }
+
+            //97~122
+            for(let i = 0; i<str2.length-1; i++)
+            {
+                let tmp = str2.slice(i, i+2);
+                if(tmp.charCodeAt(0)>=97 && tmp.charCodeAt(0)<=122)
+                {
+                    if(tmp.charCodeAt(1)>=97 && tmp.charCodeAt(1)<=122)
+                    {
+                        if(str2_arr[tmp] != null)
+                            str2_arr[tmp]++;
+                        else
+                            str2_arr[tmp] = 1;
+                    }
+                }    
+            }
+
+            
+            console.log(str1_arr);
+            console.log(str2_arr);
+
+            let str1_key = Object.keys(str1_arr);
+            let str2_key = Object.keys(str2_arr);
+            console.log(str1_key);
+            console.log(str2_key);
+
+            let Total = 0;
+            let Union = 0;
+            let Intersect = 0;
+
+            for(let i = 0; i<str1_key.length; i++)
+            {
+                for(let j = 0; j<str2_key.length; j++)
+                {
+                    if(str1_key[i] == str2_key[j])
+                    {
+                        Intersect += Math.min(str1_arr[str1_key[i]], str2_arr[str2_key[j]]);
+                        break;
+                    }
+                }
+            }
+
+            for(let i= 0; i<str1_key.length; i++)
+            {
+                Total += str1_arr[str1_key[i]];
+            }
+
+            for(let i = 0; i<str2_key.length; i++)
+            {
+                Total += str2_arr[str2_key[i]];
+            }
+
+            Union = Total - Intersect;
+
+            // console.log(Total);
+            // console.log(Union);
+            // console.log(Intersect);
+
+            if(Union == 0 && Intersect == 0)
+                answer = 65536;
+            else
+                answer = Math.floor(Intersect/Union * 65536);
+            console.log(answer);
+
+            return answer;
+        }
+
+        solution("FRANCE", "french")
+        solution("handshake","shake hands");
+        solution("aa1+aa2", "AAAA12")
+        solution("E=M*C^2",	"e=m*c^2")
+    </script>
+</body>

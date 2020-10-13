@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        //var column;
+        //var beam;
+        var real_column;
+        var real_beam;
+
+        function isColumnPossible(y, x) {
+            console.log("(" + x + "," + y + ")");
+
+            if (y == 1 || real_column[y - 1][x] == 1 || real_beam[y][x] == 1 || real_beam[y][x - 1] == 1)
+                return true;
+            return false;
+        }
+
+        function isBeamPossible(y, x) {
+            console.log("(" + x + "," + y + ")");
+
+            if (real_column[y - 1][x] == 1 || real_column[y - 1][x + 1] == 1 || ((real_beam[y][x - 1] == 1) && (real_beam[y][x + 1] == 1)))
+                return true;
+            return false;
+        }
+
+        function initialize(n) {
+            real_column = new Array(n + 3);
+            real_beam = new Array(n + 3);
+
+            for (var i = 0; i < n + 3; i++) {
+                real_column[i] = new Array(n + 3);
+                for (var j = 0; j < n + 3; j++)
+                    real_column[i][j] = 0;
+            }
+
+            for (var i = 0; i < n + 3; i++) {
+                real_beam[i] = new Array(n + 3);
+                for (var j = 0; j < n + 3; j++) {
+                    real_beam[i][j] = 0;
+                }
+            }
+        }
+        function solution(n, build_frame) {
+            var answer = [];
+
+            initialize(n);
+
+            for (var build = 0; build < build_frame.length; build++) {
+                var item = build_frame[build];
+                //console.log(item);
+                var x = item[0] + 1;
+                var y = item[1] + 1;
+                var material = item[2];
+                var type = item[3];
+
+                if (type == 1)//추가
+                {
+                    if (material == 0)//기둥
+                    {
+                        if (isColumnPossible(y, x)) {
+                            real_column[y][x] = 1;
+                            console.log("(" + x + ", " + y + ") 번째에 기둥 세움");
+                        }
+                    }
+                    else {
+                        if (isBeamPossible(y, x)) {
+                            real_beam[y][x] = 1;
+                            console.log("(" + x + ", " + y + ") 번째에 보 세움");
+                        }
+                    }
+                }
+                else//삭제
+                {
+                    if (material == 0)//기둥
+                    {
+                        if (real_column[y][x] == 1)//기둥 존재하면
+                        {
+                            real_column[y][x] = 0;//일단 삭제 !
+
+                            //기둥 쪽에서 문제 생기는 지 확인
+                            loop:
+                            for (var i = 1; i <= n + 1; i++) {
+                                for (var j = 1; j <= n + 1; j++) {
+                                    if (real_column[i][j] == 1 && !isColumnPossible(i, j)) {
+                                        real_column[y][x] = 1;
+                                        console.log("(" + x + ", " + y + ") 번째에 기둥 삭제 안됨 - 기둥 문제");
+                                        break loop;
+                                    }
+                                    if (real_beam[i][j] == 1 && !isBeamPossible(i, j)) {
+                                        real_column[y][x] = 1;
+                                        console.log("(" + x + ", " + y + ") 번째에 기둥 삭제 안됨 - 보 문제");
+                                        break loop;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    else//보
+                    {
+                        if (real_beam[y][x] == 1)//보 존재하면
+                        {
+                            real_beam[y][x] = 0;
+
+                            loop:
+                            for (var i = 1; i <= n + 1; i++) {
+                                for (var j = 1; j <= n + 1; j++) {
+                                    if (real_column[i][j] == 1 && !isColumnPossible(i, j)) {
+                                        real_beam[y][x] = 1;
+
+                                        console.log("(" + x + ", " + y + ") 번째에 보 삭제 안됨 - 기둥문제");
+
+                                        break loop;
+                                    }
+                                    if (real_beam[i][j] == 1 && !isBeamPossible(i, j)) {
+                                        real_beam[y][x] = 1;
+
+                                        console.log("(" + x + ", " + y + ") 번째에 보 삭제 안됨 - 보 문제");
+
+                                        break loop;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            for (var i = 1; i <= n + 1; i++) {
+                for (var j = 1; j <= n + 1; j++) {
+                    if (real_column[i][j] == 1)
+                        answer.push([j - 1, i - 1, 0]);
+                    if (real_beam[i][j] == 1)
+                        answer.push([j - 1, i - 1, 1]);
+                }
+            }
+
+            console.log("결과")
+
+            // answer.sort(function (a, b) { // 오름차순
+            //     return a[0] < b[0] ? -1 : a[1] < b[1] ? 0 : a[2] < b[2] ? 1 : 2;
+            // });
+            //answer.sort();
+            answer.sort((a, b) => {
+                if (a[0] > b[0]) {
+                    return 1;
+                } else if (a[0] < b[0]) {
+                    return -1;
+                } else {
+                    if (a[1] > b[1]) {
+                        return 1;
+                    } else if (a[1] < b[1]) {
+                        return -1;
+                    } else {
+                        if (a[2] > b[2]) {
+                            return 1;
+                        } else if (a[2] < b[2]) {
+                            return -1;
+                        }
+                    }
+                }
+            })
+
+            for (var i = 0; i < answer.length; i++) {
+                console.log(answer[i][0] + " " + answer[i][1] + " " + answer[i][2]);
+            }
+            return answer;
+        }
+
+        solution(5, [[1, 0, 0, 1], [1, 1, 1, 1], [2, 1, 0, 1], [2, 2, 1, 1], [5, 0, 0, 1], [5, 1, 0, 1], [4, 2, 1, 1], [3, 2, 1, 1]]);
+        solution(5, [[0, 0, 0, 1], [2, 0, 0, 1], [4, 0, 0, 1], [0, 1, 1, 1], [1, 1, 1, 1], [2, 1, 1, 1], [3, 1, 1, 1], [2, 0, 0, 0], [1, 1, 1, 0], [2, 2, 0, 1]]);
+    </script>
+</body>

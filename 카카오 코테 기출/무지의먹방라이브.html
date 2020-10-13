@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(food_times, k) {
+            var answer = 0;
+
+            let now = 0;
+            let time_cnt = 0;
+            let zero_cnt = 0;
+            let total_len = food_times.length;
+            let next = new Array(total_len);
+
+            for (let n = 0; n < total_len; n++) {
+                next[n] = (n + 1) % total_len;
+            }
+
+            while (time_cnt < k) {
+                console.log(food_times);
+                console.log(next);
+                console.log(time_cnt);
+                console.log(now);
+                console.log(zero_cnt);
+
+                food_times[now]--;
+                if (food_times[now] == 0) {
+                    zero_cnt++;
+                   
+                    
+                    for(let i = 0; i<total_len; i++)
+                    {
+                        if(next[i] == next[(now - 1 + total_len) % total_len])
+                    }
+                    next[(now - 1 + total_len) % total_len] = next[now];
+                }
+
+                if (zero_cnt == total_len)
+                {
+                    answer = -1;
+                    break;
+                }
+                
+
+                now = next[now];
+                time_cnt++;
+            }
+
+            if(answer != -1)
+            {
+                answer = now+1;
+            }
+
+            console.log(answer);
+            return answer;
+        }
+
+        let food_times = [3, 1, 2];
+        let k = 6;
+
+        solution(food_times, k);
+        solution([3,1,1,1,2,4,3],12);
+    </script>
+</body>

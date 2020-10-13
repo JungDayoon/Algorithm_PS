@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+
+<body>
+    <script>
+        function solution(N, stages) {
+            var answer = [];
+            var total = stages.length;
+            var fail = [];
+
+            for(var stage = 1; stage<=N; stage++)//stages 수
+            {
+                var fail_cnt = 0;
+                var fail_object = [];
+                for(var i = 0; i<stages.length; i++)
+                {
+                    if(stages[i] == stage)
+                    {
+                        fail_cnt++;
+                    }
+                }
+                fail_object.push(fail_cnt/total);
+                fail_object.push(stage);
+                total -= fail_cnt;
+
+                fail.push(fail_object);
+            }
+            fail.sort((a,b)=>{
+                if(a[0]<b[0])
+                {
+                    return 1;
+                }
+                else if(a[0]>b[0])
+                {
+                    return -1;
+                }
+                else{
+                    if(a[1] > b[1])
+                        return 1;
+                    else
+                        return -1;
+                }
+            });
+
+            console.log(fail);
+            for(var i = 0; i<fail.length; i++)
+                answer.push(fail[i][1]);
+
+            console.log(answer);
+            return answer;
+        }
+
+        var N = 5;
+        var stages = [2, 1, 2, 6, 2, 4, 3, 3];
+
+        solution(N, stages);
+
+        var N = 4;
+        var stages = [4,4,4,4,4];
+
+        solution(N, stages);
+    </script>
+</body>

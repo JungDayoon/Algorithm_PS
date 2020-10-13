@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<script>
+    var s = "a";
+
+    function digit(num) {
+        var string_num = num.toString();
+        return string_num.length;
+    }
+
+    function solution(s) {
+        var answer = 0;
+        var split = s.length / 2;
+        var same_cnt = 0;
+
+        if(s.length == 1)
+            return 1;
+            
+        for (var sp = 1; sp <= split; sp++) {
+            var tmp_answer = 0;
+            var prev = null;
+            for (var i = 0; i < s.length; i += sp) {
+                if (prev == null) {
+                    var prev = s.substr(i, sp);
+                    continue;
+                }
+                var now = s.substr(i, sp);
+                if (now == prev) {
+                    same_cnt++;
+                }
+                else {
+                    if (same_cnt != 0) {
+                        tmp_answer += (sp + digit(same_cnt+1));
+                        same_cnt = 0;
+                    }
+                    else {
+                        tmp_answer += sp;
+                    }
+                }
+                prev = now;
+            }
+
+            if (same_cnt != 0) {
+                tmp_answer += (sp + digit(same_cnt));
+                same_cnt = 0;
+            }
+            else {
+                tmp_answer += now.length;
+            }
+
+            console.log(sp + " : " + tmp_answer);
+            if (answer == 0)
+                answer = tmp_answer;
+            else {
+                answer = Math.min(answer, tmp_answer);
+            }
+        }
+        console.log(answer);
+        return answer;
+    }
+
+    solution(s);
+</script>
+
+</html>
