@@ -41,9 +41,9 @@ while True:
     if process < len(changeInfo):
         if time == int(changeInfo[process][0]):
             if changeInfo[process][1] == 'L':
-                dir = (dir+1)%4
+                dir = (dir + 1) % 4
             else:
-                dir = (dir+3)%4
+                dir = (dir + 3) % 4
             # dir += dirInfo[changeInfo[process][1]]
             process += 1
 
