@@ -1,4 +1,4 @@
-def getMaxScore(arr, diceInfo):
+def getScore(arr, diceInfo):
     score = 0
     for i in range(10):
         nowLoc = diceInfo[arr[i]]
@@ -32,7 +32,7 @@ def makePermutation(now, goal, arr):
     if now == goal:
         diceInfo = [0, 0, 0, 0]
         visited = [False for _ in range(33)]
-        maxScore = max(maxScore, getMaxScore(arr, diceInfo))
+        maxScore = max(maxScore, getScore(arr, diceInfo))
         return
 
     for i in range(4):
