@@ -2,8 +2,6 @@ N = int(input())
 fishMap = [[int(x) for x in input().split()] for _ in range(N)]
 pos = [[-1, 0],  [0, -1], [1, 0], [0, 1]]
 sharkSize = 2
-newShark = []
-sharkList = []
 flag = True
 resTime = 0
 fishCnt = 0
@@ -15,12 +13,12 @@ def isIn(y, x):
     return False
 
 
-def moveShark(shark_y, shark_x):
-    global flag, newShark, resTime, fishCnt
+def moveShark():
+    global flag, resTime, fishCnt
+    global shark_y, shark_x
 
     time = 0
-    queue = []
-    queue.append([shark_y, shark_x])
+    queue = [[shark_y, shark_x]]
     visited[shark_y][shark_x] = True
 
     while queue:
@@ -31,8 +29,9 @@ def moveShark(shark_y, shark_x):
 
             if 0 < fishMap[curr[0]][curr[1]] < sharkSize:
                 # 잡아먹기
-                fishMap[curr[0]][curr[1]] = 0
-                newShark = [curr[0], curr[1]]
+                shark_y = curr[0]
+                shark_x = curr[1]
+                fishMap[shark_y][shark_x] = 9
                 resTime += time
                 fishCnt += 1
                 return
@@ -52,7 +51,9 @@ def moveShark(shark_y, shark_x):
 for i in range(N):
     for j in range(N):
         if fishMap[i][j] == 9:  # 상어
-            origShark = [i, j]
+            # origShark = [i, j]
+            shark_y = i
+            shark_x = j
 
 while True:
     if fishCnt == sharkSize:
@@ -60,15 +61,10 @@ while True:
         fishCnt = 0
 
     visited = [[False for _ in range(N)] for _ in range(N)]
-    sharkList.append(origShark)
-    moveShark(origShark[0], origShark[1])
+    fishMap[shark_y][shark_x] = 0
+    moveShark()
     # 더이상 먹을 물고기가 없음
     if not flag:
         break
-    # 상어 위치 변경
-    fishMap[origShark[0]][origShark[1]] = 0
-    fishMap[newShark[0]][newShark[1]] = 9
-    origShark = newShark[:]
 
-# print(sharkList)
 print(resTime)
