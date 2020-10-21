@@ -19,16 +19,19 @@ def moveOneFish(num):
                     ny = i + pos[dir][0]
                     nx = j + pos[dir][1]
                     if isIn(ny, nx) and fishMap[ny][nx][0] != -1:  # 이동 가능
-                        newNum = fishMap[ny][nx][0]
-                        newDir = fishMap[ny][nx][1]
-                        fishMap[ny][nx][0] = num
-                        fishMap[ny][nx][1] = dir
+                        fishMap[i][j][1] = dir
+                        fishMap[i][j], fishMap[ny][nx] = fishMap[ny][nx], fishMap[i][j]
 
-                        if newNum == 0:
-                            fishMap[i][j][0] = 0
-                            fishMap[i][j][1] = 0
-                        else:
-                            fishMap[i][j] = [newNum, newDir]
+                        # newNum = fishMap[ny][nx][0]
+                        # newDir = fishMap[ny][nx][1]
+                        # fishMap[ny][nx][0] = num
+                        # fishMap[ny][nx][1] = dir
+                        #
+                        # if newNum == 0:
+                        #     fishMap[i][j][0] = newNum
+                        #     fishMap[i][j][1] = newDir
+                        # else:
+                        # fishMap[i][j] = [newNum, newDir]
                         return
                     else:
                         dir = (dir + 1)
