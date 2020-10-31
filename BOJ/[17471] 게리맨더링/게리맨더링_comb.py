@@ -4,7 +4,6 @@ def makePath(start, visited):
     visited[start] = True
     for Next in adj[start]:
         if not visited[Next]:
-            visited[Next] = True
             makePath(Next, visited)
 
 def possible(a, b):
