@@ -25,7 +25,6 @@ def quickSort(s, e, step):
 
 
 unsortedArr = [int(x) for x in input().split()]
-
 print("**** Quick Sort ****")
 step = 0
 
