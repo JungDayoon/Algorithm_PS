@@ -2,6 +2,7 @@ import heapq
 
 INF = 999999
 
+
 class Graph:
     def __init__(self, v):
         self.heap = []
