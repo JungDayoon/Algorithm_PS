@@ -1,5 +1,6 @@
 unsortedArr = [int(x) for x in input().split()]
 
+print("**** Insertion Sort ****")
 for i in range(1, len(unsortedArr)):
     compare = unsortedArr[i]
     j = i-1
