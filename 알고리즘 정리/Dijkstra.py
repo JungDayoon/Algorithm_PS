@@ -16,18 +16,23 @@ class Graph:
 
     def dijkstra(self, s):
         self.dist[s] = 0
-        for i in range(self.V):
-            heapq.heappush(self.heap, (self.dist[i], [i, self.dist[i], -1]))
+        visited = [False for _ in range(self.V)]
+
+        heapq.heappush(self.heap, (self.dist[s], [s, self.dist[s], -1]))
 
         while self.heap:
-            head = heapq.heappop(self.heap)[1]
-            if head[1] > self.dist[head[0]]:
+            head_num, head_dist, head_parent = heapq.heappop(self.heap)[1]
+            # if head[1] > self.dist[head[0]]:
+            #     continue
+            if visited[head_num]:
                 continue
-            for next in self.adj[head[0]]:
-                if head[1] + next[1] < self.dist[next[0]]:
-                    self.dist[next[0]] = head[1] + next[1]
-                    self.parent[next[0]] = head[0]
-                    heapq.heappush(self.heap, (self.dist[next[0]], [next[0], self.dist[next[0]], head[0]]))
+            visited[head_num] = True
+
+            for next in self.adj[head_num]:
+                if head_dist + next[1] < self.dist[next[0]]:
+                    self.dist[next[0]] = head_dist + next[1]
+                    self.parent[next[0]] = head_num
+                    heapq.heappush(self.heap, (self.dist[next[0]], [next[0], self.dist[next[0]], head_num]))
 
     def findPath(self, s, arr):
         arr.append(str(s))
